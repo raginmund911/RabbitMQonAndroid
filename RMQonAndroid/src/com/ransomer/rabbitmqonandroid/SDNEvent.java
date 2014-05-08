@@ -32,7 +32,7 @@ public class SDNEvent {
 	
 	@Override
     public String toString() {
-        return;
+        return null;
     }
 }
 
