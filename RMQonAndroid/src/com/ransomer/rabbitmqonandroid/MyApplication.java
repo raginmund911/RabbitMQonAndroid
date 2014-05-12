@@ -6,6 +6,7 @@ import android.app.Application;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
 
 
 
@@ -19,10 +20,8 @@ public class MyApplication extends Application {
 	public static Channel currentChannel;
 	//public static int sid = MQService.startId; 
 	public static boolean connectionActive = false;
-
-	
-	
-
-	
+	private String queue_name;
+	private QueueingConsumer MySubscription;
+	private byte[] mLastMessage;  //last message to post back
 	
 }

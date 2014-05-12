@@ -11,7 +11,6 @@ import java.util.ArrayList;
  *This is my 'controller' code...
  */
 public class SDNEventQueue {
-	//String queue_name;
 	private ArrayList <SDNEvent> eventArray = new ArrayList<SDNEvent>();
 	
 	//Initializer to read a text file into an array of SDNEvent objects

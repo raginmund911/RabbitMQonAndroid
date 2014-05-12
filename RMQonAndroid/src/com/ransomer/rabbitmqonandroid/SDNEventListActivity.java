@@ -50,6 +50,8 @@ public class SDNEventListActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_sdnevent_list);
         Log.d("SDNEventListActivity", "Activity created");
         
+        
+        
         //Get SDN events from a new data model
         SDNEventQueue Info_All = new SDNEventQueue("Info(All)");
         SDNEventQueue Debug_LogService = new SDNEventQueue("Debug.LogService");
