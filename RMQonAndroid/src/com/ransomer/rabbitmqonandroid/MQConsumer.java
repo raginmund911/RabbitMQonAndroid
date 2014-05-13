@@ -17,6 +17,9 @@ public class MQConsumer extends MQService{
 		super();
 	}
 	
+	//last message to post back
+    private byte[] mLastMessage;
+    
 	// An interface to be implemented by an object that is interested in messages(listener)
     public interface OnReceiveMessageHandler{
         public void onReceiveMessage(byte[] message);
@@ -45,7 +48,7 @@ public class MQConsumer extends MQService{
     // Create runnable for posting back to main thread
     final Runnable mReturnMessage = new Runnable() {
         public void run() {
-            mOnReceiveMessageHandler.onReceiveMessage(mLastMessage);
+            mOnReceiveMessageHandler.onReceiveMessage(MyApplication.mLastMessage);
         }
     };
     

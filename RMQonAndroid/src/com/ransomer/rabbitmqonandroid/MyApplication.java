@@ -22,6 +22,6 @@ public class MyApplication extends Application {
 	public static boolean connectionActive = false;
 	private String queue_name;
 	private QueueingConsumer MySubscription;
-	private byte[] mLastMessage;  //last message to post back
+	//byte[] mLastMessage;  //last message to post back
 	
 }
