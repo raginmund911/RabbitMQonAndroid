@@ -1,19 +1,10 @@
 package com.ransomer.rabbitmqonandroid;
 
-
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
-
-
+import android.widget.Toast;
 
 /**
  * An activity representing a list of SDNEvents. This activity has different
@@ -40,24 +31,25 @@ public class SDNEventListActivity extends FragmentActivity implements
 	 */
 	private boolean mTwoPane;
 	
-	//MQService mService;
-	
-	
+    
+    
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sdnevent_list);
-        Log.d("SDNEventListActivity", "Activity created");
+        
+		
+        
+		Log.d("SDNEventListActivity", "Activity created");
+        
+      
+ 
+        Log.d("SDNEventListActivity", "Attempting connection to RabbitMQ");
+        Toast.makeText(this,"Attempting connection to RabbitMQ ...", Toast.LENGTH_LONG).show();
         
         
-        
-        //Get SDN events from a new data model
-        SDNEventQueue Info_All = new SDNEventQueue("Info(All)");
-        SDNEventQueue Debug_LogService = new SDNEventQueue("Debug.LogService");
-        SDNEventQueue Debug_Restlet = new SDNEventQueue("Debug.Restlet");
-        SDNEventQueue Debug_ServerRouter = new SDNEventQueue("Debug.ServerRouter");
-        SDNEventQueue Debug_VirtualHost = new SDNEventQueue("Debug.VirtualHost");
+      
         
 		if (findViewById(R.id.sdnevent_detail_container) != null) {
 			// The detail container view will be present only in the
@@ -75,11 +67,13 @@ public class SDNEventListActivity extends FragmentActivity implements
 		
 		
         startService(new Intent(this,MQService.class));
-
+		
 				
 		};
 		
-			
+	
+		 
+	
 	
 	/**
 	 * Callback method from {@link SDNEventListFragment.Callbacks} indicating
@@ -111,7 +105,10 @@ public class SDNEventListActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         
+        
         Log.d("SDNEventListActivity", "Activity started");
+        
+        
         
     }
 	
@@ -132,6 +129,7 @@ public class SDNEventListActivity extends FragmentActivity implements
 	 @Override
 	 public void onPause() {
 		 super.onPause();
+		 
 		 Log.d("SDNEventListActivity", "Activity Paused...");
 	     
 	 }

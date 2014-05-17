@@ -1,19 +1,22 @@
 package com.ransomer.rabbitmqonandroid;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.rabbitmq.client.ConnectionFactory;
+import com.ransomer.rabbitmqonandroid.MessageConsumer.OnReceiveMessageHandler;
 
 public class MQService extends Service{
+	private MessageConsumer mConsumer;
+    private TextView mOutput;
 	
-	private boolean sRunning = false;
 	
 	// Binder given to clients
     //private final IBinder mBinder = new MQBinder();
@@ -31,40 +34,48 @@ public class MQService extends Service{
 	}
 	
 	@Override
-     public void onCreate() {
-           super.onCreate();
-          
-           
-           Log.d("MQService", "Service created");
-           Toast.makeText(this,"Service created ...", Toast.LENGTH_LONG).show();
-           
-                                
-     }
+	public void onCreate() {
+		super.onCreate();
+		
+		//The output TextView we'll use to display messages
+        //mOutput =  (TextView) findViewById(R.id.output);
+ 
+        //Create the consumer
+        mConsumer = new MessageConsumer("137.140.3.151",
+                "sdn_events",
+                "topic");
+ 
+        //Connect to broker
+        mConsumer.connectToRabbitMQ();
+ 
+        //register for messages
+        mConsumer.setOnReceiveMessageHandler(new OnReceiveMessageHandler(){
+ 
+            public void onReceiveMessage(byte[] message) {
+                String text = "";
+                try {
+                    text = new String(message, "UTF8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+ 
+                mOutput.append("\n"+text);
+            }
+        });
+
+
+		Log.d("MQService", "Service created");
+		Toast.makeText(this,"Service created ...", Toast.LENGTH_LONG).show();
+
+
+	}
 	
-	public void connectToRabbitMQ() throws IOException
-    {
-      
-        	Log.d("MQService", "Attempting to connect to RabbitMQ broker...");
-        	MyApplication.mFactory = new ConnectionFactory();
-	      	MyApplication.mFactory.setHost("137.140.3.151");
-	      	MyApplication.mFactory.setUsername("test");
-	      	MyApplication.mFactory.setPassword("testrabbitmq");
-	        MyApplication.mFactory.setPort(5672);
-            
-            MyApplication.mConnection = MyApplication.mFactory.newConnection();
-        
-    }
+	
 	public Runnable mRunnable = new Runnable(){  
 		public void run() {
 
-			try {
-				connectToRabbitMQ();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
+			mConsumer.connectToRabbitMQ();
+				
 
 		}
 	};
@@ -73,20 +84,8 @@ public class MQService extends Service{
      public int onStartCommand(Intent intent, int flags, int startId)
      {
     	 
-    	 if (sRunning) {
-            // sRunning = true;
-        	 Log.d("MQService", "MQService Already Started, start id " + startId + ": " + intent);
-
-         }
-    	 
-    	 else{
-    	
-	    	 Toast.makeText(this, " MQService Started", Toast.LENGTH_LONG).show();
-	    	 Thread ConnectToRabbitMQ = new Thread(mRunnable);
-	         ConnectToRabbitMQ.start();
-	         sRunning = true;
-            
-    	 }	 
+    	 Thread connect = new Thread(mRunnable);
+         connect.start();	 
     	 return START_STICKY;
      }
   

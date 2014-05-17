@@ -20,8 +20,7 @@ import com.ransomer.rabbitmqonandroid.dummy.SDNEventStreams;
  */
 public class SDNEventListFragment extends ListFragment {
 	
-	
-		
+			
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
 	 * activated item position. Only used on tablets.
